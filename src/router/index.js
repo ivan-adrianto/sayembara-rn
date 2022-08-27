@@ -1,9 +1,12 @@
 import React from 'react';
-import {StyleSheet} from 'react-native';
+import {Image, StyleSheet, View} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import Home from '../pages/Home';
 import BottomNavigator from '../components/BottomNavigator';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {useSelector} from 'react-redux';
+import Register from '../pages/Register';
+import {SayembaraLogo} from '../assets/images';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -32,12 +35,40 @@ const options = route => {
 //   );
 // };
 
+const Header = () => {
+  return (
+    <View>
+      <Image source={SayembaraLogo}></Image>
+    </View>
+  );
+};
+
 const MainApp = () => {
+  const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
+
+  if (!isLoggedIn) {
+    return (
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Register"
+          component={Register}
+          options={{
+            headerTitle: props => <Header {...props} />,
+            headerStyle: {
+              backgroundColor: '#1DD1A1',
+              height: 71,
+            },
+            headerTitleAlign: 'center',
+          }}
+        />
+      </Stack.Navigator>
+    );
+  }
+
   return (
     <Tab.Navigator
       initialRouteName="HomeTab"
       tabBar={props => <BottomNavigator {...props} />}
-      screenOptions={{headerShown: false}}
       backBehavior="history">
       <Tab.Screen
         name="MyReviews"
