@@ -7,18 +7,27 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useSelector} from 'react-redux';
 import Register from '../pages/Register';
 import {SayembaraLogo} from '../assets/images';
+import Login from '../pages/Login';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-const options = route => {
-  return {
-    headerShown: true,
-    title: route.name === 'MovieReviews' ? route.params.title : 'Your Reviews',
-    headerStyle: {backgroundColor: '#848282'},
-    headerTitleStyle: {color: 'white', fontSize: 18, fontWeight: 'bold'},
-    headerTintColor: 'white',
-  };
+const Header = () => {
+  return (
+    <View>
+      <Image source={SayembaraLogo}></Image>
+    </View>
+  );
+};
+
+const options = {
+  headerTitle: props => <Header {...props} />,
+  headerStyle: {
+    backgroundColor: '#1DD1A1',
+    height: 71,
+  },
+  headerTitleAlign: 'center',
+  headerLeft: null,
 };
 
 // const HomeStackScreen = () => {
@@ -35,32 +44,14 @@ const options = route => {
 //   );
 // };
 
-const Header = () => {
-  return (
-    <View>
-      <Image source={SayembaraLogo}></Image>
-    </View>
-  );
-};
-
 const MainApp = () => {
   const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
 
   if (!isLoggedIn) {
     return (
       <Stack.Navigator>
-        <Stack.Screen
-          name="Register"
-          component={Register}
-          options={{
-            headerTitle: props => <Header {...props} />,
-            headerStyle: {
-              backgroundColor: '#1DD1A1',
-              height: 71,
-            },
-            headerTitleAlign: 'center',
-          }}
-        />
+        <Stack.Screen name="Register" component={Register} options={options} />
+        <Stack.Screen name="Login" component={Login} options={options} />
       </Stack.Navigator>
     );
   }
