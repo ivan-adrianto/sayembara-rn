@@ -121,7 +121,7 @@ const Register = ({navigation}) => {
         </Button>
         <View style={styles.redirectToLogin}>
           <Text fontSize={16}>Already have an account?</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+          <TouchableOpacity onPress={() => navigation.navigate('login')}>
             <Text bold color={'#1DD1A1'} fontSize={16}>
               {` Sign in here`}
             </Text>

@@ -1,17 +1,66 @@
 import {
+  ActivityIndicator,
   Image,
   ScrollView,
   StyleSheet,
   TextInput,
+  ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import Text from '../components/Text';
 import {LoginImage} from '../assets/images';
 import Button from '../components/Button';
+import {useDispatch, useSelector} from 'react-redux';
+import { useEffect } from 'react';
+import {Creators as AuthActions} from '../redux/AuthRedux';
 
-const Login = () => {
+const Login = ({navigation}) => {
+  const isLoading = useSelector(state => state.auth.isLoadingLogin);
+  const error = useSelector(state => state.auth.errorLogin);
+
+  const dispatch = useDispatch();
+  const login = data => dispatch(AuthActions.loginRequest(data));
+  const resetData = () => dispatch(AuthActions.resetLoginState());
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  useEffect(() => {
+    if (error) {
+      showToast(error);
+      resetData();
+    }
+  }, [error]);
+
+  const showToast = message => {
+    ToastAndroid.showWithGravity(
+      message,
+      ToastAndroid.SHORT,
+      ToastAndroid.CENTER,
+    );
+  };
+
+  const validate = () => {
+    const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+    if (!email) {
+      return showToast('Email is required');
+    }
+    if (!password) {
+      return showToast('Password is required');
+    }
+    if (!regex.test(email)) {
+      return showToast('The email is not valid');
+    }
+    return true;
+  };
+
+  const submit = () => {
+    if (validate()) {
+      login({email, password});
+    }
+  };
   return (
     <ScrollView style={styles.page}>
       <View style={styles.titleContainer}>
@@ -29,20 +78,25 @@ const Login = () => {
           </Text>
           <TextInput
             style={styles.input}
+            onChangeText={text => setEmail(text)}
             autoCapitalize="none"
-            textContentType="email"
             autoComplete="email"
             keyboardType="email-address"></TextInput>
           <Text bold fontSize={16}>
             Password
           </Text>
-          <TextInput style={styles.input} secureTextEntry={true}></TextInput>
+          <TextInput
+            style={styles.input}
+            onChangeText={text => setPassword(text)}
+            secureTextEntry={true}></TextInput>
         </View>
         <View style={styles.formFooter}>
-          <Button>Sign In</Button>
+          <Button onPress={submit}>
+            {isLoading ? <ActivityIndicator color={'white'} /> : 'Sign In'}
+          </Button>
           <View style={styles.redirectToLogin}>
             <Text fontSize={16}>Don't have an account?</Text>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('register')}>
               <Text bold color={'#1DD1A1'} fontSize={16}>
                 {` Join here`}
               </Text>
