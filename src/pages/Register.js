@@ -138,6 +138,7 @@ const styles = StyleSheet.create({
   page: {
     flex: 1,
     paddingHorizontal: 50,
+    backgroundColor: "white"
   },
   title: {
     alignItems: 'center',

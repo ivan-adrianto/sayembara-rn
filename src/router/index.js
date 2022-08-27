@@ -50,8 +50,8 @@ const MainApp = () => {
   if (!isLoggedIn) {
     return (
       <Stack.Navigator>
-        <Stack.Screen name="Register" component={Register} options={options} />
         <Stack.Screen name="Login" component={Login} options={options} />
+        <Stack.Screen name="Register" component={Register} options={options} />
       </Stack.Navigator>
     );
   }
