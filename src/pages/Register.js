@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
   },
   title: {
     alignItems: 'center',
-    marginTop: 25,
+    marginTop: 44,
     marginBottom: 33,
   },
   input: {

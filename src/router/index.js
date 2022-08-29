@@ -58,20 +58,12 @@ const MainApp = () => {
 
   return (
     <Tab.Navigator
-      initialRouteName="HomeTab"
+      initialRouteName="home"
       tabBar={props => <BottomNavigator {...props} />}
       backBehavior="history">
-      <Tab.Screen
-        name="MyReviews"
-        component={Home}
-        options={({route}) => options(route)}
-      />
-      <Tab.Screen name="HomeTab" component={Home} />
-      <Tab.Screen
-        name="Profile"
-        component={Home}
-        options={{tabBarVisible: false}}
-      />
+      <Tab.Screen name="profile" component={Home} options={options}  />
+      <Tab.Screen name="home" component={Home} options={options} />
+      <Tab.Screen name="my contests" component={Home} options={options} />
     </Tab.Navigator>
   );
 };

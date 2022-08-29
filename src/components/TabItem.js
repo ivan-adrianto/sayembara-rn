@@ -7,18 +7,15 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import { IconHome } from '../assets/icons';
+import {IconHome, IconMenu, IconProfile} from '../assets/icons';
 
 const TabItem = ({isFocused, onPress, onLongPress, label}) => {
- 
   const Icon = () => {
-    if (label === 'Your Reviews')
-      return isFocused ? <IconHome /> : <IconHome />;
+    if (label === 'my contests') return <IconMenu />;
 
-    if (label === 'HomeTab')
-      return isFocused ? <IconHome /> : <IconHome />;
+    if (label === 'home') return <IconHome />;
 
-    if (label === 'Profile') return <IconHome />;
+    if (label === 'profile') return <IconProfile />;
 
     return <IconHome />;
   };
@@ -40,11 +37,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: '100%',
     width: windowWidth / 3,
-    backgroundColor: 'white',
+    backgroundColor: '#1DD1A1',
   },
   text: isFocused => ({
     fontSize: 13,
-    color: "black",
+    color: 'black',
     marginTop: 8,
   }),
   profilePicture: {

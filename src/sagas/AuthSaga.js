@@ -14,7 +14,7 @@ function* registerSaga(action) {
     yield put(AuthActions.registerSuccess(res.data));
     //   yield put(ProfileActions.getProfileRequest());
   } catch (error) {
-    yield put(AuthActions.registerFailure(error.response.data?.message));
+    yield put(AuthActions.registerFailure(error.response?.data?.message));
   }
 }
 
@@ -32,7 +32,6 @@ function* loginSaga(action) {
     Keychain.setInternetCredentials('token', 'token', res.data.data.token);
     // yield put(ProfileActions.getProfileRequest());
   } catch (error) {
-    console.log('error', error)
     yield put(AuthActions.loginFailure(error.response?.data?.message));
   }
 }
