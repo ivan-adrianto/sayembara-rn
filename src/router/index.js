@@ -1,13 +1,16 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Image, StyleSheet, View} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import Home from '../pages/Home';
 import BottomNavigator from '../components/BottomNavigator';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import Register from '../pages/Register';
 import {SayembaraLogo} from '../assets/images';
 import Login from '../pages/Login';
+import * as Keychain from 'react-native-keychain';
+import {Creators as AuthActions} from '../redux/AuthRedux';
+import {addBearerToken} from '../services/apiServices';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -30,22 +33,25 @@ const options = {
   headerLeft: null,
 };
 
-// const HomeStackScreen = () => {
-//   return (
-//     <HomeStack.Navigator screenOptions={{headerShown: false}}>
-//       <HomeStack.Screen name="Home" component={Home} />
-//       <HomeStack.Screen name="MovieDetail" component={MovieDetail} />
-//       <HomeStack.Screen
-//         options={({route}) => options(route)}
-//         name="MovieReviews"
-//         component={MovieReviews}
-//       />
-//     </HomeStack.Navigator>
-//   );
-// };
-
 const MainApp = () => {
+  const dispatch = useDispatch();
+  const restoreLoginSession = () => dispatch(AuthActions.restoreLoginSession());
+
   const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
+
+  const getToken = async () => {
+    const token = await Keychain.getInternetCredentials('token');
+    if (token) {
+      restoreLoginSession();
+      addBearerToken(token.password);
+      // getProfile();
+    }
+    // setLoading(false);
+  };
+  
+  useEffect(() => {
+    getToken();
+  }, []);
 
   if (!isLoggedIn) {
     return (
@@ -61,7 +67,7 @@ const MainApp = () => {
       initialRouteName="home"
       tabBar={props => <BottomNavigator {...props} />}
       backBehavior="history">
-      <Tab.Screen name="profile" component={Home} options={options}  />
+      <Tab.Screen name="profile" component={Home} options={options} />
       <Tab.Screen name="home" component={Home} options={options} />
       <Tab.Screen name="my contests" component={Home} options={options} />
     </Tab.Navigator>
