@@ -11,6 +11,7 @@ import Login from '../pages/Login';
 import * as Keychain from 'react-native-keychain';
 import {Creators as AuthActions} from '../redux/AuthRedux';
 import {addBearerToken} from '../services/apiServices';
+import { LogBox } from 'react-native';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -42,6 +43,7 @@ const MainApp = () => {
   const getToken = async () => {
     const token = await Keychain.getInternetCredentials('token');
     if (token) {
+      console.log('token', token)
       restoreLoginSession();
       addBearerToken(token.password);
       // getProfile();
@@ -51,6 +53,7 @@ const MainApp = () => {
   
   useEffect(() => {
     getToken();
+    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   }, []);
 
   if (!isLoggedIn) {
