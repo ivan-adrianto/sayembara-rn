@@ -11,12 +11,14 @@ import Login from '../pages/Login';
 import * as Keychain from 'react-native-keychain';
 import {Creators as AuthActions} from '../redux/AuthRedux';
 import {addBearerToken} from '../services/apiServices';
-import { LogBox } from 'react-native';
+import {LogBox} from 'react-native';
+import ContestDetail from '../pages/ContestDetail';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
+const HomeStack = createStackNavigator();
 
-const Header = () => {
+const Header = ({navigation}) => {
   return (
     <View>
       <Image source={SayembaraLogo}></Image>
@@ -34,6 +36,15 @@ const options = {
   headerLeft: null,
 };
 
+const HomeStackScreen = () => {
+  return (
+    <HomeStack.Navigator screenOptions={{headerShown: false}}>
+      <HomeStack.Screen name="home" component={Home} />
+      <HomeStack.Screen name="contest-detail" component={ContestDetail} />
+    </HomeStack.Navigator>
+  );
+};
+
 const MainApp = () => {
   const dispatch = useDispatch();
   const restoreLoginSession = () => dispatch(AuthActions.restoreLoginSession());
@@ -49,7 +60,7 @@ const MainApp = () => {
     }
     // setLoading(false);
   };
-  
+
   useEffect(() => {
     getToken();
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
@@ -66,11 +77,11 @@ const MainApp = () => {
 
   return (
     <Tab.Navigator
-      initialRouteName="home"
+      initialRouteName="homestack"
       tabBar={props => <BottomNavigator {...props} />}
       backBehavior="history">
       <Tab.Screen name="profile" component={Home} options={options} />
-      <Tab.Screen name="home" component={Home} options={options} />
+      <Tab.Screen name="homestack" component={HomeStackScreen} options={options} />
       <Tab.Screen name="my contests" component={Home} options={options} />
     </Tab.Navigator>
   );

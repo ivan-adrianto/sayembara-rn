@@ -15,7 +15,7 @@ import {Creators as AuthActions} from '../redux/AuthRedux';
 import {IconArrowDown} from '../assets/icons';
 import debounce from 'debounce';
 
-const Home = () => {
+const Home = ({navigation}) => {
   const dispatch = useDispatch();
   const getCategories = () => dispatch(ContestActions.getCategoriesRequest());
   const getContests = data => dispatch(ContestActions.getContestsRequest(data));
@@ -76,7 +76,11 @@ const Home = () => {
             ))}
           </View>
         )}
-        <TextInput style={styles.input} placeholder="Find Contest" onChangeText={callSearch} />
+        <TextInput
+          style={styles.input}
+          placeholder="Find Contest"
+          onChangeText={callSearch}
+        />
         <Button onPress={logout}>Search</Button>
       </View>
       {false ? (
@@ -86,7 +90,12 @@ const Home = () => {
       ) : (
         <View style={styles.contentContainer}>
           {contests.map((contest, index) => (
-            <View key={index} style={styles.itemContainer}>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('contest-detail', {id: contest.id})
+              }
+              key={index}
+              style={styles.itemContainer}>
               <View style={styles.itemHeader}>
                 <View style={styles.postedAt}>
                   <Text fontSize={12}>Posted</Text>
@@ -136,7 +145,7 @@ const Home = () => {
                   </Text>
                 </TouchableOpacity>
               </View>
-            </View>
+            </TouchableOpacity>
           ))}
         </View>
       )}
