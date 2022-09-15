@@ -21,9 +21,8 @@ export function* categoriesRequestSaga() {
 
 /* ---- Get Contests ---- */
 function* contestsSaga(action) {
-  const data = action.data;
   try {
-    const res = yield call(getContests, data);
+    const res = yield call(getContests, action.data);
     const data = res.data?.data?.map(item => {
       if (item.join_status === 'joined') {
         item.footer_text = 'Open';
@@ -40,7 +39,6 @@ function* contestsSaga(action) {
       }
       return item
     });
-    console.log('data', console.log(JSON.stringify(data, null, 4)))
     yield put(ContestActions.getContestsSuccess(data));
   } catch (error) {
     yield put(ContestActions.getContestsFailure(error.response?.data?.message));

@@ -11,18 +11,22 @@ import Button from '../components/Button';
 import Text from '../components/Text';
 import {useDispatch, useSelector} from 'react-redux';
 import {Creators as ContestActions} from '../redux/ContestRedux';
+import {Creators as AuthActions} from '../redux/AuthRedux';
 import {IconArrowDown} from '../assets/icons';
+import debounce from 'debounce';
 
 const Home = () => {
   const dispatch = useDispatch();
   const getCategories = () => dispatch(ContestActions.getCategoriesRequest());
   const getContests = data => dispatch(ContestActions.getContestsRequest(data));
+  const logout = () => dispatch(AuthActions.logout());
 
   const categories = useSelector(state => state.contest.dataCategories);
   const contests = useSelector(state => state.contest.dataContests);
 
   const [openDropdown, setOpenDropdown] = useState(false);
   const [category, setCategory] = useState('');
+  const [keyword, setKeyword] = useState('');
 
   useEffect(() => {
     getCategories();
@@ -37,9 +41,14 @@ const Home = () => {
     } else {
       setCategory(item);
       setOpenDropdown(false);
-      getContests({category_id: item.id});
+      getContests({category_id: item.id, title: keyword});
     }
   };
+
+  const callSearch = debounce(function (value) {
+    getContests({title: value, category_id: category});
+    setKeyword(value);
+  }, 500);
 
   return (
     <ScrollView style={styles.page}>
@@ -67,8 +76,8 @@ const Home = () => {
             ))}
           </View>
         )}
-        <TextInput style={styles.input} placeholder="Find Contest" />
-        <Button>Search</Button>
+        <TextInput style={styles.input} placeholder="Find Contest" onChangeText={callSearch} />
+        <Button onPress={logout}>Search</Button>
       </View>
       {false ? (
         <View style={styles.loadingIndicator}>
