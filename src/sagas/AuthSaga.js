@@ -32,7 +32,6 @@ function* loginSaga(action) {
     Keychain.setInternetCredentials('token', 'token', res.data.data.token);
     // yield put(ProfileActions.getProfileRequest());
   } catch (error) {
-    console.log(JSON.stringify(error.response.data, null, 4));
     yield put(AuthActions.loginFailure(error.response?.data?.message));
   }
 }

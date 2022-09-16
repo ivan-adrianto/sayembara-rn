@@ -23,6 +23,7 @@ const Home = ({navigation}) => {
 
   const categories = useSelector(state => state.contest.dataCategories);
   const contests = useSelector(state => state.contest.dataContests);
+  const loading = useSelector(state => state.contest.loadingContests)
 
   const [openDropdown, setOpenDropdown] = useState(false);
   const [category, setCategory] = useState('');
@@ -83,7 +84,7 @@ const Home = ({navigation}) => {
         />
         <Button onPress={logout}>Search</Button>
       </View>
-      {false ? (
+      {loading ? (
         <View style={styles.loadingIndicator}>
           <ActivityIndicator />
         </View>

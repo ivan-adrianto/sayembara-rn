@@ -13,6 +13,11 @@ export const {Types, Creators} = createActions({
   getContestsRequest: ['data'],
   getContestsSuccess: ['payload'],
   getContestsFailure: ['error'],
+
+  // get Contest Detail
+  getContestDetailRequest: ['data'],
+  getContestDetailSuccess: ['payload'],
+  getContestDetailFailure: ['error'],
 });
 
 /* ------------- Initial State ------------- */
@@ -24,6 +29,9 @@ export const INITIAL_STATE = Immutable({
   isLoadingContests: false,
   dataContests: [],
   errorContests: null,
+  isLoadingContestDetail: false,
+  dataContestDetail: [],
+  errorContestDetail: null,
 });
 
 /* ------------- Reducers ------------- */
@@ -75,6 +83,29 @@ export const getContestsFailure = (state, action) => {
   });
 };
 
+// Get Contests Detail
+export const getContestDetailRequest = state =>
+  state.merge({isLoadingContestDetail: true, dataContestDetail: []});
+
+export const getContestDetailSuccess = (state, action) => {
+  const {payload} = action;
+  return state.merge({
+    isLoadingContestDetail: false,
+    errorContestDetail: null,
+    dataContestDetail: payload,
+    isLoggedIn: true,
+  });
+};
+
+export const getContestDetailFailure = (state, action) => {
+  const {error} = action;
+  return state.merge({
+    isLoadingContestDetail: false,
+    errorContestDetail: error,
+    dataContestDetail: [],
+  });
+};
+
 /* ------------- Hookup Reducers To Type ------------- */
 
 export const contestReducer = createReducer(INITIAL_STATE, {
@@ -88,4 +119,8 @@ export const contestReducer = createReducer(INITIAL_STATE, {
   [Types.GET_CONTESTS_SUCCESS]: getContestsSuccess,
   [Types.GET_CONTESTS_FAILURE]: getContestsFailure,
   
+  // get contest detail
+  [Types.GET_CONTEST_DETAIL_REQUEST]: getContestDetailRequest,
+  [Types.GET_CONTEST_DETAIL_SUCCESS]: getContestDetailSuccess,
+  [Types.GET_CONTEST_DETAIL_FAILURE]: getContestDetailFailure,
 });

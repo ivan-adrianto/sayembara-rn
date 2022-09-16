@@ -2,55 +2,57 @@ import {Image, ScrollView, StyleSheet, View} from 'react-native';
 import React from 'react';
 import Text from '../components/Text';
 import Button from '../components/Button';
+import {useDispatch, useSelector} from 'react-redux';
+import {Creators as ContestActions} from '../redux/ContestRedux';
+import {useEffect} from 'react';
 
-const ContestDetail = () => {
+const ContestDetail = ({route, navigation}) => {
+  const dispatch = useDispatch();
+  const getContestDetail = data =>
+    dispatch(ContestActions.getContestDetailRequest(data));
+
+  const data = useSelector(state => state.contest.dataContestDetail);
+
+  useEffect(() => {
+    getContestDetail(route.params.id);
+  }, []);
+
   return (
     <ScrollView style={styles.page} showsVerticalScrollIndicator={false}>
       <View style={styles.titleContainer}>
         <Text fontSize={28} bold style={styles.title}>
-          Logo Design Contest
+          {data?.title}
         </Text>
       </View>
       <View style={styles.contestInfo}>
         <View style={styles.infoItem}>
           <Text fontSize={16}>Status: </Text>
           <Text fontSize={16} bold>
-            Open
+            {data?.status}
           </Text>
         </View>
         <View style={styles.infoItem}>
           <Text fontSize={16}>Winner Prize: </Text>
           <Text fontSize={16} bold>
-            IDR 15.000.000
+            IDR {data?.prize_text}
           </Text>
         </View>
         <View style={styles.infoItem}>
           <Text fontSize={16}>Due Date: </Text>
           <Text fontSize={16} bold>
-            Sunday, 28 July 2020
+            {data?.due_date}
           </Text>
         </View>
         <View style={styles.infoItem}>
           <Text fontSize={16}>Announcement: </Text>
           <Text fontSize={16} bold>
-            Sunday, 5 August 2020
+            {data?.announcement_date}
           </Text>
         </View>
       </View>
       <View style={styles.description}>
         <Text color={'#666666'} fontSize={16}>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit
-          dolorum reprehenderit eveniet, id tempore omnis facere quia ullam quod
-          vel dolores exercitationem molestiae ut quisquam, optio minus eaque
-          quasi molestias quae. Eum quis odio porro quo perspiciatis repudiandae
-          dolor fugit amet, veniam necessitatibus unde harum labore at
-          accusantium repellat minima natus blanditiis sed culpa, quia
-          laboriosam vitae aut reprehenderit sequi? Deleniti a praesentium
-          quidem nulla nobis dolores culpa corrupti iure, perspiciatis,
-          accusamus itaque velit nam quae quis dolorem aliquid architecto
-          pariatur doloribus enim quasi molestiae? Ut distinctio fugit
-          blanditiis atque est perspiciatis explicabo voluptatibus rem vero,
-          eligendi culpa illo labore.
+          {data?.description}
         </Text>
       </View>
       <View style={styles.buttonContainer}>
@@ -60,10 +62,10 @@ const ContestDetail = () => {
         <Text fontSize={28} bold style={styles.submissionTitle}>
           Submissions
         </Text>
-        {[1, 2, 3, 4].map((submission, index) => (
+        {data?.submissions?.map((submission, index) => (
           <View style={styles.submissionItem} key={index}>
             <Image
-              source={{uri: 'https://picsum.photos/400'}}
+              source={{uri: submission?.thumbnail}}
               style={styles.thumbnail}
             />
             <View style={styles.itemContent}>
@@ -72,12 +74,9 @@ const ContestDetail = () => {
                 bold
                 color={'#1DD1A1'}
                 style={styles.contentTitle}>
-                Logo design of XYZ restaurant
+                {submission?.title}
               </Text>
-              <Text color={'#C0C0C0'}>
-                lorem ipsum dolor sit amet. lorem ipsum dolor sit amet. lorem
-                ipsum...
-              </Text>
+              <Text color={'#C0C0C0'}>{submission?.description}</Text>
             </View>
           </View>
         ))}
@@ -135,7 +134,7 @@ const styles = StyleSheet.create({
     height: 120,
     paddingHorizontal: 15,
     paddingVertical: 18,
-    marginBottom: 25
+    marginBottom: 25,
   },
   thumbnail: {
     height: 180,

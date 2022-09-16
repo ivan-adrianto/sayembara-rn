@@ -12,3 +12,9 @@ export async function getContests(data) {
   const res = await api.get(API.GET_CONTESTS, {params: data});
   return res;
 }
+
+// get contests
+export async function getContestDetail(id) {
+  const res = await api.get(`${API.GET_CONTESTS_DETAIL}/${id}`);
+  return res;
+}

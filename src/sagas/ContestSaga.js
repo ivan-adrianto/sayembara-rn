@@ -3,7 +3,11 @@ import {
   Types as ContestTypes,
   Creators as ContestActions,
 } from '../redux/ContestRedux';
-import {getCategories, getContests} from '../services/contest';
+import {
+  getCategories,
+  getContestDetail,
+  getContests,
+} from '../services/contest';
 
 /* ---- Get Categories ---- */
 function* categoriesSaga() {
@@ -37,7 +41,7 @@ function* contestsSaga(action) {
         item.footer_background_color = '#1DD1A1';
         item.footer_text_color = 'white';
       }
-      return item
+      return item;
     });
     yield put(ContestActions.getContestsSuccess(data));
   } catch (error) {
@@ -49,6 +53,24 @@ export function* contestsRequestSaga() {
   yield takeLatest(ContestTypes.GET_CONTESTS_REQUEST, contestsSaga);
 }
 
+/* ---- Get CaontestDetail ---- */
+function* contestDetailSaga(action) {
+  try {
+    const res = yield call(getContestDetail, action.data);
+    yield put(ContestActions.getContestDetailSuccess(res.data.data));
+  } catch (error) {
+    yield put(ContestActions.getContestDetailFailure(error.response.data));
+  }
+}
+
+export function* contestDetailRequestSaga() {
+  yield takeLatest(ContestTypes.GET_CONTEST_DETAIL_REQUEST, contestDetailSaga);
+}
+
 export function* contestSaga() {
-  yield all([call(categoriesRequestSaga), call(contestsRequestSaga)]);
+  yield all([
+    call(categoriesRequestSaga),
+    call(contestsRequestSaga),
+    call(contestDetailRequestSaga),
+  ]);
 }
