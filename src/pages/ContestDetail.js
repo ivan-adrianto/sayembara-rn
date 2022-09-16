@@ -1,10 +1,17 @@
-import {Image, ScrollView, StyleSheet, View} from 'react-native';
-import React from 'react';
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import React, {useState} from 'react';
 import Text from '../components/Text';
 import Button from '../components/Button';
 import {useDispatch, useSelector} from 'react-redux';
 import {Creators as ContestActions} from '../redux/ContestRedux';
 import {useEffect} from 'react';
+import ModalSubmissionDetail from '../components/Modals/ModalSubmissionDetail';
 
 const ContestDetail = ({route, navigation}) => {
   const dispatch = useDispatch();
@@ -12,6 +19,8 @@ const ContestDetail = ({route, navigation}) => {
     dispatch(ContestActions.getContestDetailRequest(data));
 
   const data = useSelector(state => state.contest.dataContestDetail);
+
+  const [showModalSubmission, setShowModalSubmission] = useState(false);
 
   useEffect(() => {
     getContestDetail(route.params.id);
@@ -63,7 +72,10 @@ const ContestDetail = ({route, navigation}) => {
           Submissions
         </Text>
         {data?.submissions?.map((submission, index) => (
-          <View style={styles.submissionItem} key={index}>
+          <TouchableOpacity
+            onPress={() => setShowModalSubmission(true)}
+            style={styles.submissionItem}
+            key={index}>
             <Image
               source={{uri: submission?.thumbnail}}
               style={styles.thumbnail}
@@ -78,9 +90,10 @@ const ContestDetail = ({route, navigation}) => {
               </Text>
               <Text color={'#C0C0C0'}>{submission?.description}</Text>
             </View>
-          </View>
+          </TouchableOpacity>
         ))}
       </View>
+      <ModalSubmissionDetail visible={showModalSubmission} />
     </ScrollView>
   );
 };
@@ -93,6 +106,7 @@ const styles = StyleSheet.create({
     paddingTop: 35,
     paddingBottom: 100,
     flex: 1,
+    backgroundColor: "white"
   },
   titleContainer: {
     marginBottom: 39,
