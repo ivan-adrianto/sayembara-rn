@@ -18,6 +18,9 @@ export const {Types, Creators} = createActions({
   getContestDetailRequest: ['data'],
   getContestDetailSuccess: ['payload'],
   getContestDetailFailure: ['error'],
+
+  // reset contest state
+  resetContestState: ['data'],
 });
 
 /* ------------- Initial State ------------- */
@@ -58,7 +61,6 @@ export const getCategoriesFailure = (state, action) => {
     dataCategories: [],
   });
 };
-
 
 // Get Contests
 export const getContestsRequest = state =>
@@ -106,6 +108,13 @@ export const getContestDetailFailure = (state, action) => {
   });
 };
 
+export const resetContestState = (state, action) => {
+  return state.merge({
+    errorContests: null,
+    errorCategories: null
+  })
+}
+
 /* ------------- Hookup Reducers To Type ------------- */
 
 export const contestReducer = createReducer(INITIAL_STATE, {
@@ -118,7 +127,7 @@ export const contestReducer = createReducer(INITIAL_STATE, {
   [Types.GET_CONTESTS_REQUEST]: getContestsRequest,
   [Types.GET_CONTESTS_SUCCESS]: getContestsSuccess,
   [Types.GET_CONTESTS_FAILURE]: getContestsFailure,
-  
+
   // get contest detail
   [Types.GET_CONTEST_DETAIL_REQUEST]: getContestDetailRequest,
   [Types.GET_CONTEST_DETAIL_SUCCESS]: getContestDetailSuccess,

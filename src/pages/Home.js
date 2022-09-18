@@ -3,6 +3,7 @@ import {
   ScrollView,
   StyleSheet,
   TextInput,
+  ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -20,10 +21,13 @@ const Home = ({navigation}) => {
   const getCategories = () => dispatch(ContestActions.getCategoriesRequest());
   const getContests = data => dispatch(ContestActions.getContestsRequest(data));
   const logout = () => dispatch(AuthActions.logout());
+  const resetContestState = () => dispatch(ContestActions.resetContestState());
 
   const categories = useSelector(state => state.contest.dataCategories);
   const contests = useSelector(state => state.contest.dataContests);
-  const loading = useSelector(state => state.contest.loadingContests)
+  const loading = useSelector(state => state.contest.loadingContests);
+  const errorContests = useSelector(state => state.contest.errorContests);
+  const errorCategories = useSelector(state => state.contest.errorCategories);
 
   const [openDropdown, setOpenDropdown] = useState(false);
   const [category, setCategory] = useState('');
@@ -33,6 +37,23 @@ const Home = ({navigation}) => {
     getCategories();
     getContests();
   }, []);
+
+  const showToast = message => {
+    ToastAndroid.showWithGravity(
+      message,
+      ToastAndroid.SHORT,
+      ToastAndroid.CENTER,
+    );
+  };
+
+  useEffect(() => {
+    resetContestState();
+    if (errorContests) {
+      showToast(errorContests);
+    } else if (errorCategories) {
+      showToast('ada error');
+    }
+  }, [errorContests, errorCategories]);
 
   const onSelectCategory = item => {
     if (item === 'all') {

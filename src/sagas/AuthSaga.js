@@ -32,7 +32,13 @@ function* loginSaga(action) {
     Keychain.setInternetCredentials('token', 'token', res.data.data.token);
     // yield put(ProfileActions.getProfileRequest());
   } catch (error) {
-    yield put(AuthActions.loginFailure(error.response?.data?.message));
+    if (error.code === 'ERR_NETWORK') {
+      yield put(AuthActions.loginFailure('You have no internet connection'));
+    } else if (error.response?.data) {
+      yield put(AuthActions.loginFailure(error.response?.data?.message));
+    } else {
+      yield put(AuthActions.loginFailure("Something went wrong. Try again later"))
+    }
   }
 }
 
