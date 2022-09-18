@@ -16,11 +16,19 @@ function* categoriesSaga() {
     yield put(ContestActions.getCategoriesSuccess(res.data.data));
   } catch (error) {
     if (error.code === 'ERR_NETWORK') {
-      yield put(ContestActions.getCategoriesFailure('You have no internet connection'));
+      yield put(
+        ContestActions.getCategoriesFailure('You have no internet connection'),
+      );
     } else if (error.response?.data) {
-      yield put(ContestActions.getCategoriesFailure(error.response?.data?.message));
+      yield put(
+        ContestActions.getCategoriesFailure(error.response?.data?.message),
+      );
     } else {
-      yield put(ContestActions.getCategoriesFailure("Something went wrong. Try again later"))
+      yield put(
+        ContestActions.getCategoriesFailure(
+          'Something went wrong. Try again later',
+        ),
+      );
     }
   }
 }
@@ -50,13 +58,21 @@ function* contestsSaga(action) {
       return item;
     });
     yield put(ContestActions.getContestsSuccess(data));
-  } catch (error) {    
+  } catch (error) {
     if (error.code === 'ERR_NETWORK') {
-      yield put(ContestActions.getContestsFailure('You have no internet connection'));
+      yield put(
+        ContestActions.getContestsFailure('You have no internet connection'),
+      );
     } else if (error.response?.data) {
-      yield put(ContestActions.getContestsFailure(error.response?.data?.message));
+      yield put(
+        ContestActions.getContestsFailure(error.response?.data?.message),
+      );
     } else {
-      yield put(ContestActions.getContestsFailure("Something went wrong. Try again later"))
+      yield put(
+        ContestActions.getContestsFailure(
+          'Something went wrong. Try again later',
+        ),
+      );
     }
   }
 }
@@ -72,11 +88,21 @@ function* contestDetailSaga(action) {
     yield put(ContestActions.getContestDetailSuccess(res.data.data));
   } catch (error) {
     if (error.code === 'ERR_NETWORK') {
-      yield put(ContestActions.getContestDetailFailure('You have no internet connection'));
+      yield put(
+        ContestActions.getContestDetailFailure(
+          'You have no internet connection',
+        ),
+      );
     } else if (error.response?.data) {
-      yield put(ContestActions.getContestDetailFailure(error.response?.data?.message));
+      yield put(
+        ContestActions.getContestDetailFailure(error.response?.data?.message),
+      );
     } else {
-      yield put(ContestActions.getContestDetailFailure("Something went wrong. Try again later"))
+      yield put(
+        ContestActions.getContestDetailFailure(
+          'Something went wrong. Try again later',
+        ),
+      );
     }
   }
 }

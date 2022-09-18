@@ -75,7 +75,9 @@ const ContestDetail = ({route, navigation}) => {
       </View>
       <View style={styles.submissionsContainer}>
         <Text fontSize={28} bold style={styles.submissionTitle}>
-          Submissions
+          {data?.submissions?.length > 0
+            ? 'Submissions'
+            : 'No submissions yet...'}
         </Text>
         {data?.submissions?.map((submission, index) => (
           <TouchableOpacity
@@ -99,7 +101,10 @@ const ContestDetail = ({route, navigation}) => {
           </TouchableOpacity>
         ))}
       </View>
-      <ModalSubmissionDetail visible={showModalSubmission} />
+      <ModalSubmissionDetail
+        visible={showModalSubmission}
+        onHide={() => setShowModalSubmission(false)}
+      />
     </ScrollView>
   );
 };

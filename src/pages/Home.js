@@ -51,7 +51,7 @@ const Home = ({navigation}) => {
     if (errorContests) {
       showToast(errorContests);
     } else if (errorCategories) {
-      showToast('ada error');
+      showToast(errorCategories);
     }
   }, [errorContests, errorCategories]);
 

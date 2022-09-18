@@ -1,9 +1,17 @@
-import {Image, Modal, ScrollView, StyleSheet, View} from 'react-native';
+import {
+  Image,
+  Modal,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React, {useRef, useState} from 'react';
 import Text from '../Text';
 import Carousel, {Pagination} from 'react-native-snap-carousel';
+import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 
-const ModalSubmissionDetail = ({visible}) => {
+const ModalSubmissionDetail = ({visible, onHide}) => {
   const data = [
     'https://picsum.photos/145',
     'https://picsum.photos/146',
@@ -20,44 +28,49 @@ const ModalSubmissionDetail = ({visible}) => {
 
   return (
     <Modal animationType="slide" transparent={true} visible={visible}>
-      <ScrollView contentContainerStyle={styles.modalContainer}>
-        <View style={styles.modalBox}>
-          <Carousel
-            data={data}
-            renderItem={renderCarousel}
-            itemWidth={329}
-            sliderWidth={329}
-            itemHeight={329}
-            sliderHeight={329}
-            ref={sliderRef}
-            onSnapToItem={index => setActiveSlider(index)}
-            autoplayInterval={5000}
-          />
-          <Pagination
-            dotsLength={data.length}
-            activeDotIndex={activeSlider}
-            containerStyle={styles.paginationContainer}
-            dotColor={'white'}
-            dotStyle={styles.paginationDot}
-            inactiveDotColor={'white'}
-            inactiveDotOpacity={0.5}
-            inactiveDotScale={1}
-            carouselRef={sliderRef}
-            tappableDots={!!sliderRef}
-          />
-          <View style={styles.contentContainer}>
-            <Text color={'#1DD1A1'} fontSize={24} bold>
-              by John Doe
-            </Text>
-            <Text fontSize={16} style={styles.description}>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi,
-              natus temporibus animi exercitationem dolore fugit officia libero
-              sunt cupiditate sapiente incidunt maxime amet tempora mollitia!
-              Soluta in ullam odit laboriosam.
-            </Text>
+      <TouchableOpacity
+        style={styles.modalContainer}
+        onPressOut={onHide}
+        >
+        <TouchableOpacity onPress={() => {}}>
+          <View style={styles.modalBox}>
+            <Carousel
+              data={data}
+              renderItem={renderCarousel}
+              itemWidth={329}
+              sliderWidth={329}
+              itemHeight={329}
+              sliderHeight={329}
+              ref={sliderRef}
+              onSnapToItem={index => setActiveSlider(index)}
+              autoplayInterval={5000}
+            />
+            <Pagination
+              dotsLength={data.length}
+              activeDotIndex={activeSlider}
+              containerStyle={styles.paginationContainer}
+              dotColor={'white'}
+              dotStyle={styles.paginationDot}
+              inactiveDotColor={'white'}
+              inactiveDotOpacity={0.5}
+              inactiveDotScale={1}
+              carouselRef={sliderRef}
+              tappableDots={!!sliderRef}
+            />
+            <View style={styles.contentContainer}>
+              <Text color={'#1DD1A1'} fontSize={24} bold>
+                by John Doe
+              </Text>
+              <Text fontSize={16} style={styles.description}>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi,
+                natus temporibus animi exercitationem dolore fugit officia
+                libero sunt cupiditate sapiente incidunt maxime amet tempora
+                mollitia! Soluta in ullam odit laboriosam.
+              </Text>
+            </View>
           </View>
-        </View>
-      </ScrollView>
+        </TouchableOpacity>
+      </TouchableOpacity>
     </Modal>
   );
 };
@@ -91,6 +104,6 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   paginationDot: {
-    top: -50
+    top: -50,
   },
 });

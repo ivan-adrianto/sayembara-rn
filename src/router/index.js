@@ -56,8 +56,8 @@ const MainApp = () => {
   const getToken = async () => {
     const token = await Keychain.getInternetCredentials('token');
     if (token) {
-      restoreLoginSession();
       addBearerToken(token.password);
+      restoreLoginSession();
       // getProfile();
     }
     // setLoading(false);

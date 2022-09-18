@@ -1,8 +1,10 @@
 import {combineReducers} from 'redux';
 import {authReducer} from './AuthRedux';
-import { contestReducer } from './ContestRedux';
+import {contestReducer} from './ContestRedux';
+import {submissionReducer} from './SubmissionRedux';
 
 export const rootReducer = combineReducers({
   auth: authReducer,
-  contest: contestReducer
+  contest: contestReducer,
+  submission: submissionReducer,
 });
