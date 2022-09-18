@@ -12,6 +12,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {Creators as ContestActions} from '../redux/ContestRedux';
 import {useEffect} from 'react';
 import ModalSubmissionDetail from '../components/Modals/ModalSubmissionDetail';
+import {uriFormatter} from '../helpers/uri';
 
 const ContestDetail = ({route, navigation}) => {
   const dispatch = useDispatch();
@@ -85,7 +86,7 @@ const ContestDetail = ({route, navigation}) => {
             style={styles.submissionItem}
             key={index}>
             <Image
-              source={{uri: submission?.thumbnail}}
+              source={{uri: uriFormatter(submission?.thumbnail)}}
               style={styles.thumbnail}
             />
             <View style={styles.itemContent}>
@@ -96,7 +97,7 @@ const ContestDetail = ({route, navigation}) => {
                 style={styles.contentTitle}>
                 {submission?.title}
               </Text>
-              <Text color={'#C0C0C0'}>{submission?.description}</Text>
+              <Text color={'#C0C0C0'} numberOfLines={2}>{submission?.description}</Text>
             </View>
           </TouchableOpacity>
         ))}
