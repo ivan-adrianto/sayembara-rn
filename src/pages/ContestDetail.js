@@ -65,7 +65,13 @@ const ContestDetail = ({route, navigation}) => {
         </Text>
       </View>
       <View style={styles.buttonContainer}>
-        <Button style={styles.button}>Submit Your Work</Button>
+        <Button
+          style={styles.button}
+          onPress={() =>
+            navigation.navigate('submit-work', {id: route.params.id})
+          }>
+          Submit Your Work
+        </Button>
       </View>
       <View style={styles.submissionsContainer}>
         <Text fontSize={28} bold style={styles.submissionTitle}>
@@ -106,7 +112,7 @@ const styles = StyleSheet.create({
     paddingTop: 35,
     paddingBottom: 100,
     flex: 1,
-    backgroundColor: "white"
+    backgroundColor: 'white',
   },
   titleContainer: {
     marginBottom: 39,

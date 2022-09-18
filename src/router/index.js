@@ -13,6 +13,7 @@ import {Creators as AuthActions} from '../redux/AuthRedux';
 import {addBearerToken} from '../services/apiServices';
 import {LogBox} from 'react-native';
 import ContestDetail from '../pages/ContestDetail';
+import SubmitWork from '../pages/SubmitWork';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -41,6 +42,7 @@ const HomeStackScreen = () => {
     <HomeStack.Navigator screenOptions={{headerShown: false}}>
       <HomeStack.Screen name="home" component={Home} />
       <HomeStack.Screen name="contest-detail" component={ContestDetail} />
+      <HomeStack.Screen name="submit-work" component={SubmitWork} />
     </HomeStack.Navigator>
   );
 };
@@ -81,7 +83,11 @@ const MainApp = () => {
       tabBar={props => <BottomNavigator {...props} />}
       backBehavior="history">
       <Tab.Screen name="profile" component={Home} options={options} />
-      <Tab.Screen name="homestack" component={HomeStackScreen} options={options} />
+      <Tab.Screen
+        name="homestack"
+        component={HomeStackScreen}
+        options={options}
+      />
       <Tab.Screen name="my contests" component={Home} options={options} />
     </Tab.Navigator>
   );
