@@ -10,6 +10,7 @@ import Text from '../components/Text';
 import Button from '../components/Button';
 import {useDispatch, useSelector} from 'react-redux';
 import {Creators as ContestActions} from '../redux/ContestRedux';
+import {Creators as SubmissionActions} from '../redux/SubmissionRedux';
 import {useEffect} from 'react';
 import ModalSubmissionDetail from '../components/Modals/ModalSubmissionDetail';
 import {uriFormatter} from '../helpers/uri';
@@ -18,6 +19,8 @@ const ContestDetail = ({route, navigation}) => {
   const dispatch = useDispatch();
   const getContestDetail = data =>
     dispatch(ContestActions.getContestDetailRequest(data));
+  const getSubmission = data =>
+    dispatch(SubmissionActions.getSubmissionRequest(data));
 
   const data = useSelector(state => state.contest.dataContestDetail);
 
@@ -26,6 +29,11 @@ const ContestDetail = ({route, navigation}) => {
   useEffect(() => {
     getContestDetail(route.params.id);
   }, []);
+
+  const openModalSubmission = submission => {
+    getSubmission(submission.id)
+    setShowModalSubmission(true);
+  };
 
   return (
     <ScrollView style={styles.page} showsVerticalScrollIndicator={false}>
@@ -82,7 +90,7 @@ const ContestDetail = ({route, navigation}) => {
         </Text>
         {data?.submissions?.map((submission, index) => (
           <TouchableOpacity
-            onPress={() => setShowModalSubmission(true)}
+            onPress={() => openModalSubmission(submission)}
             style={styles.submissionItem}
             key={index}>
             <Image
@@ -97,7 +105,9 @@ const ContestDetail = ({route, navigation}) => {
                 style={styles.contentTitle}>
                 {submission?.title}
               </Text>
-              <Text color={'#C0C0C0'} numberOfLines={2}>{submission?.description}</Text>
+              <Text color={'#C0C0C0'} numberOfLines={2}>
+                {submission?.description}
+              </Text>
             </View>
           </TouchableOpacity>
         ))}

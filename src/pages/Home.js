@@ -111,7 +111,7 @@ const Home = ({navigation}) => {
         </View>
       ) : (
         <View style={styles.contentContainer}>
-          {contests.map((contest, index) => (
+          {contests?.map((contest, index) => (
             <TouchableOpacity
               onPress={() =>
                 navigation.navigate('contest-detail', {id: contest.id})
