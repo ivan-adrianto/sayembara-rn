@@ -14,6 +14,7 @@ import {addBearerToken} from '../services/apiServices';
 import {LogBox} from 'react-native';
 import ContestDetail from '../pages/ContestDetail';
 import SubmitWork from '../pages/SubmitWork';
+import MyContests from '../pages/MyContests';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -88,7 +89,11 @@ const MainApp = () => {
         component={HomeStackScreen}
         options={options}
       />
-      <Tab.Screen name="my contests" component={Home} options={options} />
+      <Tab.Screen
+        name="my-contests"
+        component={MyContests}
+        options={{...options, tabBarVisible: false}}
+      />
     </Tab.Navigator>
   );
 };

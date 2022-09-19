@@ -11,7 +11,7 @@ import {IconHome, IconMenu, IconProfile} from '../assets/icons';
 
 const TabItem = ({isFocused, onPress, onLongPress, label}) => {
   const Icon = () => {
-    if (label === 'my contests') return <IconMenu />;
+    if (label === 'my-contests') return <IconMenu />;
 
     if (label === 'home') return <IconHome />;
 
