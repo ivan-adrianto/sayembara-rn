@@ -31,7 +31,7 @@ const ContestDetail = ({route, navigation}) => {
   }, []);
 
   const openModalSubmission = submission => {
-    getSubmission(submission.id)
+    getSubmission(submission.id);
     setShowModalSubmission(true);
   };
 
@@ -73,15 +73,22 @@ const ContestDetail = ({route, navigation}) => {
           {data?.description}
         </Text>
       </View>
-      <View style={styles.buttonContainer}>
-        <Button
-          style={styles.button}
-          onPress={() =>
-            navigation.navigate('submit-work', {id: route.params.id})
-          }>
-          Submit Your Work
-        </Button>
-      </View>
+      {data?.join_status === 'not join' && (
+        <View style={styles.buttonContainer}>
+          <Button
+            style={styles.button}
+            onPress={() =>
+              navigation.navigate('submit-work', {id: route.params.id})
+            }>
+            Submit Your Work
+          </Button>
+        </View>
+      )}
+      {data?.join_status === 'winner' && (
+        <Text fontSize={32} bold style={styles.winner} >
+          Congratulations! you are the winner!
+        </Text>
+      )}
       <View style={styles.submissionsContainer}>
         <Text fontSize={28} bold style={styles.submissionTitle}>
           {data?.submissions?.length > 0
@@ -180,4 +187,8 @@ const styles = StyleSheet.create({
   contentTitle: {
     marginBottom: 13,
   },
+  winner: {
+    textAlign: "center",
+    marginBottom: 30
+  }
 });
