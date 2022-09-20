@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {Image, StyleSheet, View} from 'react-native';
+import {AppState, Image, StyleSheet, View} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import Home from '../pages/Home';
 import BottomNavigator from '../components/BottomNavigator';

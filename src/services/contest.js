@@ -18,3 +18,9 @@ export async function getContestDetail(id) {
   const res = await api.get(`${API.GET_CONTESTS_DETAIL}/${id}`);
   return res;
 }
+
+// get my contests
+export async function getMyContests(data) {
+  const res = await api.get(API.GET_MY_CONTESTS, {params: data});
+  return res;
+}

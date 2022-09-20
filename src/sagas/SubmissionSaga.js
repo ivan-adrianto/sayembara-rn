@@ -25,8 +25,6 @@ export function* postSubmissionRequestSaga() {
 function* getSubmissionSaga(action) {
   try {
     const res = yield call(getSubmission, action.data);
-    console.log(JSON.stringify(res.data.data, null, 4));
-    
     yield put(SubmissionActions.getSubmissionSuccess(res.data.data));
   } catch (error) {
     yield put(

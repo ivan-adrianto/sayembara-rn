@@ -7,6 +7,7 @@ import {
   getCategories,
   getContestDetail,
   getContests,
+  getMyContests,
 } from '../services/contest';
 
 /* ---- Get Categories ---- */
@@ -55,7 +56,7 @@ export function* contestsRequestSaga() {
   yield takeLatest(ContestTypes.GET_CONTESTS_REQUEST, contestsSaga);
 }
 
-/* ---- Get CaontestDetail ---- */
+/* ---- Get Contest Detail ---- */
 function* contestDetailSaga(action) {
   try {
     const res = yield call(getContestDetail, action.data);
@@ -71,10 +72,43 @@ export function* contestDetailRequestSaga() {
   yield takeLatest(ContestTypes.GET_CONTEST_DETAIL_REQUEST, contestDetailSaga);
 }
 
+/* ---- Get My Contests ---- */
+function* myContestsSaga(action) {
+  try {
+    const res = yield call(getMyContests, action.data);
+    const data = res.data?.data?.map(item => {
+      if (item.join_status === 'joined') {
+        item.footer_text = 'Open';
+        item.footer_background_color = '#D4E7FF';
+        item.footer_text_color = '#54A0FF';
+      } else if (item.join_status === 'winner') {
+        item.footer_text = 'Win';
+        item.footer_background_color = '#C7F3E7';
+        item.footer_text_color = '#1DD1A1';
+      } else {
+        item.footer_text = 'Apply';
+        item.footer_background_color = '#1DD1A1';
+        item.footer_text_color = 'white';
+      }
+      return item;
+    });
+    yield put(ContestActions.getMyContestsSuccess(data));
+  } catch (error) {
+    yield put(
+      ContestActions.getMyContestsFailure(error.response?.data?.message),
+    );
+  }
+}
+
+export function* myContestsRequestSaga() {
+  yield takeLatest(ContestTypes.GET_MY_CONTESTS_REQUEST, myContestsSaga);
+}
+
 export function* contestSaga() {
   yield all([
     call(categoriesRequestSaga),
     call(contestsRequestSaga),
     call(contestDetailRequestSaga),
+    call(myContestsRequestSaga),
   ]);
 }

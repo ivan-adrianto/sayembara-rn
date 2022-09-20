@@ -5,4 +5,5 @@ export const API = {
   GET_CONTESTS: '/contests',
   GET_CONTESTS_DETAIL: '/contests/detail',
   SUBMISSION: "/submissions",
+  GET_MY_CONTESTS: "/contests/me"
 };

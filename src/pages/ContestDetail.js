@@ -14,8 +14,10 @@ import {Creators as SubmissionActions} from '../redux/SubmissionRedux';
 import {useEffect} from 'react';
 import ModalSubmissionDetail from '../components/Modals/ModalSubmissionDetail';
 import {uriFormatter} from '../helpers/uri';
+import { useIsFocused } from '@react-navigation/native';
 
 const ContestDetail = ({route, navigation}) => {
+  const isFocused = useIsFocused()
   const dispatch = useDispatch();
   const getContestDetail = data =>
     dispatch(ContestActions.getContestDetailRequest(data));
@@ -27,8 +29,8 @@ const ContestDetail = ({route, navigation}) => {
   const [showModalSubmission, setShowModalSubmission] = useState(false);
 
   useEffect(() => {
-    getContestDetail(route.params.id);
-  }, []);
+    isFocused && getContestDetail(route.params.id);
+  }, [isFocused]);
 
   const openModalSubmission = submission => {
     getSubmission(submission.id);

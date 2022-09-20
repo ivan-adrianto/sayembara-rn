@@ -15,19 +15,25 @@ import {Creators as ContestActions} from '../redux/ContestRedux';
 import {Creators as AuthActions} from '../redux/AuthRedux';
 import {IconArrowDown} from '../assets/icons';
 import debounce from 'debounce';
+import {useIsFocused} from '@react-navigation/native';
 
 const MyContests = ({navigation}) => {
+  const isFocused = useIsFocused();
+
   const dispatch = useDispatch();
   const getCategories = () => dispatch(ContestActions.getCategoriesRequest());
-  const getContests = data => dispatch(ContestActions.getContestsRequest(data));
-  const logout = () => dispatch(AuthActions.logout());
+  const getMyContests = data =>
+    dispatch(ContestActions.getMyContestsRequest(data));
   const resetContestState = () => dispatch(ContestActions.resetContestState());
 
   const categories = useSelector(state => state.contest.dataCategories);
-  const contests = useSelector(state => state.contest.dataContests);
-  const loading = useSelector(state => state.contest.loadingContests);
-  const errorContests = useSelector(state => state.contest.errorContests);
+  const contests = useSelector(state => state.contest.dataMyContests);
+  const loading = useSelector(state => state.contest.isLoadingMyContests);
+  const errorMyContests = useSelector(state => state.contest.errorMyContests);
   const errorCategories = useSelector(state => state.contest.errorCategories);
+  const dataPostSubmission = useSelector(
+    state => state.submission.dataPostSubmission,
+  );
 
   const [openDropdown, setOpenDropdown] = useState(false);
   const [category, setCategory] = useState('');
@@ -35,8 +41,13 @@ const MyContests = ({navigation}) => {
 
   useEffect(() => {
     getCategories();
-    getContests();
+    getMyContests({category_id: category, title: keyword});
   }, []);
+
+  useEffect(() => {
+    dataPostSubmission &&
+      getMyContests({category_id: category, title: keyword});
+  }, [dataPostSubmission]);
 
   const showToast = message => {
     ToastAndroid.showWithGravity(
@@ -48,33 +59,35 @@ const MyContests = ({navigation}) => {
 
   useEffect(() => {
     resetContestState();
-    if (errorContests) {
-      showToast(errorContests);
+    if (errorMyContests) {
+      showToast(errorMyContests);
     } else if (errorCategories) {
       showToast(errorCategories);
     }
-  }, [errorContests, errorCategories]);
+  }, [errorMyContests, errorCategories]);
 
   const onSelectCategory = item => {
     if (item === 'all') {
       setCategory('');
       setOpenDropdown(false);
-      getContests();
+      getMyContests();
     } else {
       setCategory(item);
       setOpenDropdown(false);
-      getContests({category_id: item.id, title: keyword});
+      getMyContests({category_id: item.id, title: keyword});
     }
   };
 
   const callSearch = debounce(function (value) {
-    getContests({title: value, category_id: category});
+    getMyContests({title: value, category_id: category});
     setKeyword(value);
   }, 500);
 
   return (
     <ScrollView style={styles.page}>
-      <Text fontSize={28} bold style={styles.pageTitle}>My Contests</Text>
+      <Text fontSize={28} bold style={styles.pageTitle}>
+        My Contests
+      </Text>
       <View>
         <TouchableOpacity
           onPress={() => setOpenDropdown(!openDropdown)}
@@ -104,11 +117,11 @@ const MyContests = ({navigation}) => {
           placeholder="Find Contest"
           onChangeText={callSearch}
         />
-        <Button onPress={logout}>Search</Button>
+        <Button onPress={callSearch}>Search</Button>
       </View>
       {loading ? (
         <View style={styles.loadingIndicator}>
-          <ActivityIndicator />
+          <ActivityIndicator color={'#1DD1A1'} size={40} />
         </View>
       ) : (
         <View style={styles.contentContainer}>
@@ -186,8 +199,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 45,
   },
   pageTitle: {
-    textAlign: "center",
-    marginBottom: 30
+    textAlign: 'center',
+    marginBottom: 30,
   },
   dropdown: {
     borderWidth: 1,
@@ -227,6 +240,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     fontFamily: 'Lato-Regular',
     marginBottom: 17,
+  },
+  loadingIndicator: {
+    marginTop: 100,
   },
   contentContainer: {
     paddingHorizontal: 3,

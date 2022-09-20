@@ -19,6 +19,11 @@ export const {Types, Creators} = createActions({
   getContestDetailSuccess: ['payload'],
   getContestDetailFailure: ['error'],
 
+  // get my Contests
+  getMyContestsRequest: ['data'],
+  getMyContestsSuccess: ['payload'],
+  getMyContestsFailure: ['error'],
+
   // reset contest state
   resetContestState: ['data'],
 });
@@ -35,6 +40,9 @@ export const INITIAL_STATE = Immutable({
   isLoadingContestDetail: false,
   dataContestDetail: [],
   errorContestDetail: null,
+  isLoadingMyContests: false,
+  dataMyContests: [],
+  errorMyContests: null,
 });
 
 /* ------------- Reducers ------------- */
@@ -49,7 +57,6 @@ export const getCategoriesSuccess = (state, action) => {
     isLoadingCategories: false,
     errorCategories: null,
     dataCategories: payload,
-    isLoggedIn: true,
   });
 };
 
@@ -72,7 +79,6 @@ export const getContestsSuccess = (state, action) => {
     isLoadingContests: false,
     errorContests: null,
     dataContests: payload,
-    isLoggedIn: true,
   });
 };
 
@@ -95,7 +101,6 @@ export const getContestDetailSuccess = (state, action) => {
     isLoadingContestDetail: false,
     errorContestDetail: null,
     dataContestDetail: payload,
-    isLoggedIn: true,
   });
 };
 
@@ -108,12 +113,36 @@ export const getContestDetailFailure = (state, action) => {
   });
 };
 
+// Get My Contests
+export const getMyContestsRequest = state =>
+  state.merge({isLoadingMyContests: true, dataMyContests: []});
+
+export const getMyContestsSuccess = (state, action) => {
+  const {payload} = action;
+  return state.merge({
+    isLoadingMyContests: false,
+    errorMyContests: null,
+    dataMyContests: payload,
+  });
+};
+
+export const getMyContestsFailure = (state, action) => {
+  const {error} = action;
+  return state.merge({
+    isLoadingMyContests: false,
+    errorMyContests: error,
+    dataMyContests: [],
+  });
+};
+
+// Reset Contest State
 export const resetContestState = (state, action) => {
   return state.merge({
     errorContests: null,
-    errorCategories: null
-  })
-}
+    errorCategories: null,
+    errorMyContests: null,
+  });
+};
 
 /* ------------- Hookup Reducers To Type ------------- */
 
@@ -132,4 +161,9 @@ export const contestReducer = createReducer(INITIAL_STATE, {
   [Types.GET_CONTEST_DETAIL_REQUEST]: getContestDetailRequest,
   [Types.GET_CONTEST_DETAIL_SUCCESS]: getContestDetailSuccess,
   [Types.GET_CONTEST_DETAIL_FAILURE]: getContestDetailFailure,
+
+  // get contests
+  [Types.GET_MY_CONTESTS_REQUEST]: getMyContestsRequest,
+  [Types.GET_MY_CONTESTS_SUCCESS]: getMyContestsSuccess,
+  [Types.GET_MY_CONTESTS_FAILURE]: getMyContestsFailure,
 });

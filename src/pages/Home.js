@@ -16,15 +16,11 @@ import {Creators as ContestActions} from '../redux/ContestRedux';
 import {Creators as AuthActions} from '../redux/AuthRedux';
 import {IconArrowDown} from '../assets/icons';
 import debounce from 'debounce';
-import { useIsFocused } from '@react-navigation/native';
 
 const Home = ({navigation}) => {
-  const isFocused = useIsFocused()
-
   const dispatch = useDispatch();
   const getCategories = () => dispatch(ContestActions.getCategoriesRequest());
   const getContests = data => dispatch(ContestActions.getContestsRequest(data));
-  const logout = () => dispatch(AuthActions.logout());
   const resetContestState = () => dispatch(ContestActions.resetContestState());
 
   const categories = useSelector(state => state.contest.dataCategories);
@@ -43,15 +39,14 @@ const Home = ({navigation}) => {
   useEffect(() => {
     getCategories();
     getContests();
-    AppState.addEventListener("change", getDataOnLaunch)
+    AppState.addEventListener('change', getDataOnLaunch);
   }, []);
 
   useEffect(() => {
     if (dataPostSubmission) {
       getContests({category_id: category, title: keyword});
-    } 
+    }
   }, [dataPostSubmission]);
-
 
   useEffect(() => {
     resetContestState();
@@ -71,10 +66,10 @@ const Home = ({navigation}) => {
   };
 
   const getDataOnLaunch = () => {
-    if (AppState.currentState === "active") {
-      getContests()
-    } 
-  }
+    if (AppState.currentState === 'active') {
+      getContests();
+    }
+  };
 
   const onSelectCategory = item => {
     if (item === 'all') {
