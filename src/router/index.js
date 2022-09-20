@@ -15,6 +15,7 @@ import {LogBox} from 'react-native';
 import ContestDetail from '../pages/ContestDetail';
 import SubmitWork from '../pages/SubmitWork';
 import MyContests from '../pages/MyContests';
+import Profile from '../pages/Profile';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -83,7 +84,11 @@ const MainApp = () => {
       initialRouteName="homestack"
       tabBar={props => <BottomNavigator {...props} />}
       backBehavior="history">
-      <Tab.Screen name="profile" component={Home} options={options} />
+      <Tab.Screen
+        name="profile"
+        component={Profile}
+        options={{...options, tabBarVisible: false}}
+      />
       <Tab.Screen
         name="homestack"
         component={HomeStackScreen}

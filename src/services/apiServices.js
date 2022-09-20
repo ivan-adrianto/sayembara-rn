@@ -14,14 +14,14 @@ api.interceptors.response.use(
     return res;
   },
   async function (err) {
+    console.log(JSON.stringify(err.response, null, 4))
     try {
-      if (err.code == 'ERR_NETWORK') {
-        err.response.data = {message: 'You have no active internet connection'};
-      } else if (!err.response.data?.message) {
+      if (!err.response.data?.message) {
         err.response.data = {message: 'Something went wrong. Try again later'};
       }
       return Promise.reject(err);
     } catch (error) {
+      return Promise.reject(err);
       null;
     }
   },
