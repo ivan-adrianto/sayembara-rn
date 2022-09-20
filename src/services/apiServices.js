@@ -14,7 +14,6 @@ api.interceptors.response.use(
     return res;
   },
   async function (err) {
-    console.log(JSON.stringify(err.response, null, 4))
     try {
       if (!err.response.data?.message) {
         err.response.data = {message: 'Something went wrong. Try again later'};

@@ -10,6 +10,7 @@ import {SayembaraLogo} from '../assets/images';
 import Login from '../pages/Login';
 import * as Keychain from 'react-native-keychain';
 import {Creators as AuthActions} from '../redux/AuthRedux';
+import {Creators as ProfileActions} from '../redux/ProfileRedux';
 import {addBearerToken} from '../services/apiServices';
 import {LogBox} from 'react-native';
 import ContestDetail from '../pages/ContestDetail';
@@ -52,6 +53,7 @@ const HomeStackScreen = () => {
 const MainApp = () => {
   const dispatch = useDispatch();
   const restoreLoginSession = () => dispatch(AuthActions.restoreLoginSession());
+  const getProfile = () => dispatch(ProfileActions.getProfileRequest())
 
   const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
 
@@ -60,7 +62,7 @@ const MainApp = () => {
     if (token) {
       addBearerToken(token.password);
       restoreLoginSession();
-      // getProfile();
+      getProfile();
     }
     // setLoading(false);
   };

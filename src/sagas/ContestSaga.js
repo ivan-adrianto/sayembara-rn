@@ -16,7 +16,6 @@ function* categoriesSaga() {
     const res = yield call(getCategories);
     yield put(ContestActions.getCategoriesSuccess(res.data.data));
   } catch (error) {
-    console.log('error', error)
     yield put(
       ContestActions.getCategoriesFailure(error.response?.data?.message),
     );

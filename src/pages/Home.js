@@ -13,7 +13,6 @@ import Button from '../components/Button';
 import Text from '../components/Text';
 import {useDispatch, useSelector} from 'react-redux';
 import {Creators as ContestActions} from '../redux/ContestRedux';
-import {Creators as AuthActions} from '../redux/AuthRedux';
 import {IconArrowDown} from '../assets/icons';
 import debounce from 'debounce';
 
