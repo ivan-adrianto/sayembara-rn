@@ -1,5 +1,6 @@
 import {
   ActivityIndicator,
+  AppState,
   ScrollView,
   StyleSheet,
   TextInput,
@@ -15,8 +16,11 @@ import {Creators as ContestActions} from '../redux/ContestRedux';
 import {Creators as AuthActions} from '../redux/AuthRedux';
 import {IconArrowDown} from '../assets/icons';
 import debounce from 'debounce';
+import { useIsFocused } from '@react-navigation/native';
 
 const Home = ({navigation}) => {
+  const isFocused = useIsFocused()
+
   const dispatch = useDispatch();
   const getCategories = () => dispatch(ContestActions.getCategoriesRequest());
   const getContests = data => dispatch(ContestActions.getContestsRequest(data));
@@ -25,9 +29,12 @@ const Home = ({navigation}) => {
 
   const categories = useSelector(state => state.contest.dataCategories);
   const contests = useSelector(state => state.contest.dataContests);
-  const loading = useSelector(state => state.contest.loadingContests);
+  const loading = useSelector(state => state.contest.isLoadingContests);
   const errorContests = useSelector(state => state.contest.errorContests);
   const errorCategories = useSelector(state => state.contest.errorCategories);
+  const dataPostSubmission = useSelector(
+    state => state.submission.dataPostSubmission,
+  );
 
   const [openDropdown, setOpenDropdown] = useState(false);
   const [category, setCategory] = useState('');
@@ -36,15 +43,15 @@ const Home = ({navigation}) => {
   useEffect(() => {
     getCategories();
     getContests();
+    AppState.addEventListener("change", getDataOnLaunch)
   }, []);
 
-  const showToast = message => {
-    ToastAndroid.showWithGravity(
-      message,
-      ToastAndroid.SHORT,
-      ToastAndroid.CENTER,
-    );
-  };
+  useEffect(() => {
+    if (dataPostSubmission) {
+      getContests({category_id: category, title: keyword});
+    } 
+  }, [dataPostSubmission]);
+
 
   useEffect(() => {
     resetContestState();
@@ -54,6 +61,20 @@ const Home = ({navigation}) => {
       showToast(errorCategories);
     }
   }, [errorContests, errorCategories]);
+
+  const showToast = message => {
+    ToastAndroid.showWithGravity(
+      message,
+      ToastAndroid.SHORT,
+      ToastAndroid.CENTER,
+    );
+  };
+
+  const getDataOnLaunch = () => {
+    if (AppState.currentState === "active") {
+      getContests()
+    } 
+  }
 
   const onSelectCategory = item => {
     if (item === 'all') {
@@ -103,11 +124,11 @@ const Home = ({navigation}) => {
           placeholder="Find Contest"
           onChangeText={callSearch}
         />
-        <Button onPress={logout}>Search</Button>
+        <Button onPress={callSearch}>Search</Button>
       </View>
       {loading ? (
         <View style={styles.loadingIndicator}>
-          <ActivityIndicator />
+          <ActivityIndicator color={'#1DD1A1'} size={40} />
         </View>
       ) : (
         <View style={styles.contentContainer}>
@@ -222,6 +243,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     fontFamily: 'Lato-Regular',
     marginBottom: 17,
+  },
+  loadingIndicator: {
+    flex: 1,
+    height: 300,
+    justifyContent: 'center',
   },
   contentContainer: {
     paddingHorizontal: 3,
