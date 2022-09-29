@@ -17,6 +17,8 @@ import ContestDetail from '../pages/ContestDetail';
 import SubmitWork from '../pages/SubmitWork';
 import MyContests from '../pages/MyContests';
 import Profile from '../pages/Profile';
+import {useState} from 'react';
+import Splash from '../pages/Splash';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -53,9 +55,11 @@ const HomeStackScreen = () => {
 const MainApp = () => {
   const dispatch = useDispatch();
   const restoreLoginSession = () => dispatch(AuthActions.restoreLoginSession());
-  const getProfile = () => dispatch(ProfileActions.getProfileRequest())
+  const getProfile = () => dispatch(ProfileActions.getProfileRequest());
 
   const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
+
+  const [loading, setLoading] = useState(true);
 
   const getToken = async () => {
     const token = await Keychain.getInternetCredentials('token');
@@ -64,7 +68,7 @@ const MainApp = () => {
       restoreLoginSession();
       getProfile();
     }
-    // setLoading(false);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -72,6 +76,17 @@ const MainApp = () => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   }, []);
 
+  if (loading) {
+    return (
+      <Stack.Navigator initialRouteName="Splash">
+        <Stack.Screen
+          name="Splash"
+          component={Splash}
+          options={{headerShown: false}}
+        />
+      </Stack.Navigator>
+    );
+  }
   if (!isLoggedIn) {
     return (
       <Stack.Navigator>

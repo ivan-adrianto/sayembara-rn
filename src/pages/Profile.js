@@ -16,6 +16,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import DocumentPicker from 'react-native-document-picker';
 import RNFS from 'react-native-fs';
 import {Creators as ProfileActions} from '../redux/ProfileRedux';
+import {Creators as AuthActions} from '../redux/AuthRedux';
 import {uriFormatter} from '../helpers/uri';
 
 const Profile = () => {
@@ -24,6 +25,7 @@ const Profile = () => {
     dispatch(ProfileActions.updateProfileRequest(data));
   const resetState = () => dispatch(ProfileActions.resetProfileState());
   const getProfile = () => dispatch(ProfileActions.getProfileRequest());
+  const logout = () => dispatch(AuthActions.logout())
 
   const data = useSelector(state => state.profile.dataGetProfile);
   const isLoading = useSelector(state => state.profile.isLoadingUpdateProfile);
@@ -190,7 +192,7 @@ const Profile = () => {
             Update
           </Button>
         )}
-        <Button backgroundColor={'#FF6B6B'}>Logout</Button>
+        <Button backgroundColor={'#FF6B6B'} onPress={() => logout()}>Logout</Button>
       </View>
     </ScrollView>
   );
