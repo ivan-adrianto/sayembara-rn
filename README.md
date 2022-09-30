@@ -1,4 +1,5 @@
 # Sayembara
+![Sayembara](https://user-images.githubusercontent.com/72068097/193168227-324422eb-069a-41a3-8c24-aa534c303993.png)
 
 ## Features
 Sayembara is a mobile app in which users can join a design contest and submit their design. User can also update their profile and see other contestants submission, as well as their own submissions.
